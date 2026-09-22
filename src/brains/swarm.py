@@ -13,17 +13,18 @@ from brains.config import SWARM
 log = logging.getLogger(__name__)
 
 SENTENCE_END = re.compile(r"(?<!\d)[.!?][\"')\]]?\s*$")  # "2." is a list marker, not an end
-REVIEW = "Question asked:\n{prompt}\n\nAnswer so far, review it:\n{text}"
+REVIEW = "{context}Question asked:\n{prompt}\n\nAnswer so far, review it:\n{text}"
+CONTEXT_TURNS = 4     # earlier messages shown to the reviewers
+CONTEXT_CHARS = 300   # per message
 JUDGE = ("Question asked:\n{prompt}\n\nAnswer so far:\n{text}\n\nLatest sentence:\n{sentence}\n\n"
          "Reviews:\n{reviews}")
 REVIEW_CHARS = SWARM["review_chars"]
-REDO = ("Your last sentence was rejected.\nRejected sentence: {sentence}\n"
-        "Editor: {reason}\nReviewers said:\n{verdicts}\n"
-        "Reply with a replacement for that one sentence, then carry on with the answer. "
-        "Do not repeat any earlier sentence, and never mention the editor or the reviewers.")
+REDO = ("That last sentence does not work.\n\n{sentence}\n\nThe problem: {reason}\n\n"
+        "Say it better and keep going. Write only the answer itself, in the same voice: "
+        "no notes about this message and no words from it.")
 CARRY_ON = "Carry on with the answer from where it stops. Do not repeat any earlier sentence."
 MAX_REDOS = SWARM["max_redos"]
-MIN_SENTENCES = SWARM["min_sentences"]
+MIN_WORDS = SWARM["min_words"]
 MAX_CARRY_ONS = SWARM["max_carry_ons"]
 LIST_MARKER = re.compile(r"^\s*(\d+[.)]|[-*])\s*")  # the writer numbers its sentences
 
@@ -37,12 +38,30 @@ class Step(NamedTuple):
     text: str           # the answer so far, rejected sentences excluded
 
 
+def context_of(history: list[dict[str, str]] | None) -> str:
+    """The last few turns, trimmed, so reviewers judge a reply in its conversation."""
+    if not history:
+        return ""
+    turns = "\n".join(f"{m['role']}: {' '.join(m['content'].split())[:CONTEXT_CHARS]}"
+                      for m in history[-CONTEXT_TURNS:])
+    return f"Earlier in the conversation:\n{turns}\n\n"
+
+
+def opening(sentence: str, words: int = 4) -> str:
+    return " ".join(sentence.lower().split()[:words])
+
+
 def repeats(sentence: str, accepted: str, ratio: float = SWARM["duplicate_ratio"]) -> bool:
-    """True if this sentence is one already accepted, word for word or reworded."""
+    """True if this sentence is one already accepted, word for word or reworded.
+
+    Two sentences that open the same way ("I am so sorry ...") count as one, however
+    differently they end: a writer apologising five times is repeating itself.
+    """
     if sentence in accepted:
         return True
-    return any(SequenceMatcher(None, sentence.lower(), s.lower() + ".").ratio() > ratio
-               for s in accepted.lower().split(". ") if s)
+    said = [s for s in accepted.lower().split(". ") if s]
+    return any(SequenceMatcher(None, sentence.lower(), s + ".").ratio() > ratio
+               or opening(sentence) == opening(s) for s in said)
 
 
 def is_sentence(new_text: str) -> bool:
@@ -113,7 +132,8 @@ def judge(prompt: str, text: str, sentence: str, reviews: dict[str, str],
 
 def generate_reviewed(prompt: str, name: str = "GEN",
                       on_chunk: Callable[[str], None] | None = None,
-                      profile: str | None = None) -> Iterator[Step]:
+                      profile: str | None = None,
+                      history: list[dict[str, str]] | None = None) -> Iterator[Step]:
     """Stream an answer sentence by sentence.
 
     GOD picks the profile from the question unless one is passed. Each finished sentence is
@@ -124,17 +144,20 @@ def generate_reviewed(prompt: str, name: str = "GEN",
     if not isinstance(prompt, str) or not prompt.strip():
         raise AgentError("prompt must be a non-empty string")
     profile = profile or route(prompt)  # GOD picks the panel before a word is written
+    context = context_of(history)
     cfg = load(name, profile)
     log.info("PROMPT (%s): %s", profile, prompt)
     accepted, redo, redos = "", "", 0
     kept_count, carry_ons = 0, 0
     while True:
-        messages = [{"role": "system", "content": cfg["instructions"].strip()},
+        # the redo note rides in the system message: a user turn gets answered, not obeyed,
+        # and Qwen's template refuses a system message anywhere but first
+        system = cfg["instructions"].strip() + (f"\n\n{redo}" if redo else "")
+        messages = [{"role": "system", "content": system},
+                    *(history or []),
                     {"role": "user", "content": prompt}]
         if accepted:
             messages.append({"role": "assistant", "content": accepted})
-        if redo:
-            messages.append({"role": "user", "content": redo})
 
         buf, restart = "", False
         for chunk in stream_chat(cfg, messages):
@@ -149,8 +172,8 @@ def generate_reviewed(prompt: str, name: str = "GEN",
                 buf = ""
                 continue
             text = f"{accepted} {sentence}".strip()
-            reviews = ask_all(dict.fromkeys(AGENTS, REVIEW.format(prompt=prompt, text=text)),
-                              profile)
+            reviews = ask_all(dict.fromkeys(
+                AGENTS, REVIEW.format(context=context, prompt=prompt, text=text)), profile)
             decision, reason = judge(prompt, text, sentence, reviews, profile)
             log.info("SENTENCE: %s", sentence)
             log.info("VERDICTS: %s", verdict_lines(reviews, profile).replace("\n", " | "))
@@ -160,8 +183,7 @@ def generate_reviewed(prompt: str, name: str = "GEN",
             yield Step(sentence, reviews, decision, reason, not rewriting,
                        accepted if rewriting else text)
             if rewriting:
-                redo = REDO.format(sentence=sentence, reason=reason,
-                                   verdicts=verdict_lines(reviews, profile))
+                redo = REDO.format(sentence=sentence, reason=reason)
                 redos, restart = redos + 1, True
                 log.info("REDO %d SENT TO WRITER:\n%s", redos, redo)
                 break  # drop the sentence, restart the stream with GOD's reason
@@ -169,9 +191,9 @@ def generate_reviewed(prompt: str, name: str = "GEN",
             kept_count += 1
         if restart:
             continue
-        if kept_count < MIN_SENTENCES and carry_ons < MAX_CARRY_ONS:
+        if len(accepted.split()) < MIN_WORDS and carry_ons < MAX_CARRY_ONS:
             carry_ons, redo = carry_ons + 1, CARRY_ON  # writer stopped early, nudge it
-            log.info("CARRY ON %d after %d sentences", carry_ons, kept_count)
+            log.info("CARRY ON %d after %d words", carry_ons, len(accepted.split()))
             continue
         log.info("FINAL: %s", accepted)
         return

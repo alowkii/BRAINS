@@ -8,7 +8,7 @@ timeout = 120  # seconds per request
 
 [swarm]
 max_redos = 2         # rewrites per sentence, so a stubborn model cannot loop forever
-min_sentences = 3     # a redo makes the writer stop early, so nudge it to keep going
+min_words = 45        # below this the writer stopped too early, so nudge it on
 max_carry_ons = 2
 review_chars = 400    # per review sent to GOD; six full ones overflow a 4k context
-duplicate_ratio = 0.75  # above this, a new sentence counts as one already said
+duplicate_ratio = 0.55  # above this, a new sentence counts as one already said
