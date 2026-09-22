@@ -118,9 +118,9 @@ def verdict(reply: str, name: str = "", profile: str = DEFAULT_PROFILE) -> str:
     return v
 
 
-def route(question: str) -> str:
-    """Ask GOD which panel fits this question. Falls back to the default profile."""
-    picked = verdict(ask("GOD", question, "router"), "GOD", "router")
+def route(question: str, context: str = "") -> str:
+    """Ask GOD which panel fits this question, in its conversation if there is one."""
+    picked = verdict(ask("GOD", context + question, "router"), "GOD", "router")
     if picked not in profiles():
         log.warning("router picked %r, falling back to %s", picked, DEFAULT_PROFILE)
         return DEFAULT_PROFILE
