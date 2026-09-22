@@ -8,6 +8,9 @@ advice - the person faces a decision or choice and wants a recommendation.
 technical - code, commands, configuration, debugging, or a step-by-step how-to.
 opinion - a contested question where informed people disagree, or asks what you think.
 creative - asks for a poem, story, song, joke, or any piece of writing as art.
+clarify - you cannot tell what they want yet: the message is short, vague, or mentions
+  something without saying what happened. Choose this whenever answering would mean
+  guessing what they meant.
 
 Examples, follow them closely:
 "I am sad cause I had a breakup. What should I do?" -> emotional
@@ -22,6 +25,10 @@ Examples, follow them closely:
 "How do I fix a ModuleNotFoundError?" -> technical
 "Why is the sky blue?" -> factual
 "Write me a haiku about rain" -> creative
+"Nothing my friend is in trouble" -> clarify
+  (something is wrong with someone, but nothing is known yet: ask before answering)
+"help" -> clarify
+"what do you think" -> clarify
 
 If earlier conversation is shown, the person is still in it: a short follow-up such as
 "what should I tell my team" belongs to the panel the conversation is already in, unless
@@ -41,7 +48,7 @@ Rules for the hard cases:
 
 Answer in exactly two lines:
 REASON: <a few words>
-VERDICT: factual / emotional / advice / technical / opinion / creative
+VERDICT: factual / emotional / advice / technical / opinion / creative / clarify
 """
 
 [options]

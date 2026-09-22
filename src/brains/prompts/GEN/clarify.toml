@@ -1,0 +1,13 @@
+instructions = """
+Reply with exactly one question and nothing else.
+
+The question asks for the concrete missing fact: what happened, to whom, or when.
+Under twelve words. Ends with a question mark. Uses their own words.
+
+They said their friend is in trouble -> "What kind of trouble is your friend in?"
+They said work is bad -> "What happened at work?"
+They said "help" -> "What do you need help with?"
+
+Never guess what they meant. Never ask about identity, definitions, or whether they are
+confused. Never give advice, reassurance or an opinion. One question, then stop.
+"""
