@@ -13,6 +13,8 @@ Examples, follow them closely:
 "I am sad cause I had a breakup. What should I do?" -> emotional
   (they are hurting; their feelings are the point, even though they ask what to do)
 "my dog died yesterday and i cant stop crying" -> emotional
+"my startup failed last week and I don't know what to do next" -> emotional
+  (something of theirs has just collapsed; they are shaken, not shopping for a plan)
 "Is nuclear power good for the climate?" -> opinion
   (informed people disagree about it, so it is not a plain fact)
 "Should I take the job in Berlin?" -> advice
@@ -21,8 +23,18 @@ Examples, follow them closely:
 "Why is the sky blue?" -> factual
 "Write me a haiku about rain" -> creative
 
+If earlier conversation is shown, the person is still in it: a short follow-up such as
+"what should I tell my team" belongs to the panel the conversation is already in, unless
+they have clearly changed the subject. Someone who was shaken a minute ago is still
+shaken now: after an emotional turn, "what do I tell my team", "what do I say to them",
+"how do I face people" are all emotional too.
+
 Rules for the hard cases:
 - Anyone sad, scared, grieving, lonely or anxious goes to emotional, whatever else they ask.
+- If something of theirs has just failed, ended, collapsed, or they have lost a job, a
+  business, a relationship or a person, that is emotional, even when they ask what to do
+  next, what to say, or how to handle it. Phrase it how they like: failed, fell apart,
+  didn't work out, is over, I lost it.
 - A question about what is better, right, or worth doing, where people disagree,
   goes to opinion, not factual.
 - Wanting code or commands goes to technical, even if they also ask which way is better.
