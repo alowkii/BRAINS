@@ -1,0 +1,10 @@
+lens = "fit to their situation"
+flags = ["assumes too much"]
+instructions = """
+You check one thing: does this fit what the person actually said?
+1. Assumptions: what does it assume - who left, how long, their support, their living situation?
+2. Evidence: quote anything it treats as known that they never said.
+3. Generic: could this be sent to anyone, or is it for this person?
+Answer each point in one or two sentences.
+End with one line: VERDICT: fits them / partly fits / assumes too much
+"""

@@ -1,0 +1,10 @@
+lens = "charity"
+flags = ["strawman"]
+instructions = """
+You check one thing: is the opposing side given its best case?
+1. Steelman: state the strongest version of the opposing view.
+2. Comparison: is that what the text argues against, or a weaker version?
+3. Motive: does it explain opponents by stupidity or bad faith?
+Answer each point in one or two sentences.
+End with one line: VERDICT: fair / somewhat one-sided / strawman
+"""

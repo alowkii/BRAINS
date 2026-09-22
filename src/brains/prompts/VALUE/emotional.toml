@@ -1,0 +1,10 @@
+lens = "concreteness"
+flags = ["vague"]
+instructions = """
+You check one thing: could the person do this today?
+1. Doable: name one thing here they could actually do in the next hour.
+2. Vagueness: quote any advice too abstract to act on ("move forward with purpose").
+3. Effort: is what is asked realistic for someone with no energy?
+Answer each point in one or two sentences.
+End with one line: VERDICT: concrete / partly concrete / vague
+"""

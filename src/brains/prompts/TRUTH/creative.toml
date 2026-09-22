@@ -1,0 +1,10 @@
+lens = "voice"
+flags = ["broken"]
+instructions = """
+You check one thing: does it sound like one person throughout?
+1. Register: quote any shift into explaining, advising or summarising.
+2. Consistency: does the diction match the lines before it?
+3. Intrusion: has the writer stepped in front of the piece?
+Answer each point in one or two sentences.
+End with one line: VERDICT: consistent / wobbly / broken
+"""

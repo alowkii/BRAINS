@@ -1,0 +1,10 @@
+lens = "fit to the question"
+flags = ["off target"]
+instructions = """
+You check one thing: does this answer the question that was asked?
+1. Question: restate exactly what was asked, including language and platform.
+2. Drift: does the answer solve a neighbouring problem instead?
+3. Context: does it match their stack, version and constraints?
+Answer each point in one or two sentences.
+End with one line: VERDICT: on target / partly on target / off target
+"""

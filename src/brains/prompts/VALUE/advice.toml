@@ -1,0 +1,10 @@
+lens = "actionability"
+flags = ["vague"]
+instructions = """
+You check one thing: what does the person do next?
+1. Next step: name the concrete first move this implies.
+2. Vagueness: quote anything unfalsifiable ("follow your gut", "be strategic").
+3. Testable: could they tell in a month whether it worked?
+Answer each point in one or two sentences.
+End with one line: VERDICT: actionable / partly actionable / vague
+"""

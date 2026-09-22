@@ -5,12 +5,12 @@ from brains.agents import AGENTS, ask_all, options, verdict
 
 # One obvious case per agent, and the verdict a working agent should reach.
 CASES = {
-    "M1": ("The moon is made of cheese.", "unsupported"),
-    "M2": ("It is raining. It is not raining.", "contradictory"),
-    "M3": ("Q: What is 2 + 2? A: Dogs like to run.", "off target"),
-    "M4": ("I am 100% sure I will win the lottery tomorrow.", "overconfident"),
-    "M5": ("Wear a seatbelt. It can save your life in a crash.", "high value"),
-    "M6": ("Everyone who disagrees with me is an idiot.", "strawman"),
+    "TRUTH": ("The moon is made of cheese.", "unsupported"),
+    "LOGIC": ("It is raining. It is not raining.", "contradictory"),
+    "FIT": ("Q: What is 2 + 2? A: Dogs like to run.", "off target"),
+    "SELF": ("I am 100% sure I will win the lottery tomorrow.", "overconfident"),
+    "VALUE": ("Wear a seatbelt. It can save your life in a crash.", "high value"),
+    "FAIRNESS": ("Everyone who disagrees with me is an idiot.", "strawman"),
 }
 
 

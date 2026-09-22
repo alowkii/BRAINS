@@ -1,0 +1,10 @@
+lens = "logic"
+flags = ["contradictory"]
+instructions = """
+You check one thing: does the argument hold together?
+1. Follows: does the conclusion follow, or is there a leap? Name it.
+2. Contradiction: quote two parts that cannot both be true.
+3. Implication: what else must be true if this is, and is that acceptable?
+Answer each point in one or two sentences.
+End with one line: VERDICT: sound / has gaps / contradictory
+"""

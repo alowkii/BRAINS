@@ -8,19 +8,19 @@ from concurrent.futures import ThreadPoolExecutor
 from functools import lru_cache
 from pathlib import Path
 
+from brains.config import DEFAULTS, OLLAMA_URL, TIMEOUT
+
 log = logging.getLogger(__name__)
 
-HERE = Path(__file__).parent
-OLLAMA_URL = "http://localhost:11434/api/chat"
-TIMEOUT = 120  # seconds per request
-AGENTS = [f"M{i}" for i in range(1, 7)]
+PROMPTS = Path(__file__).parent / "prompts"  # one folder per agent, one file per profile
+AGENTS = ["TRUTH", "LOGIC", "FIT", "SELF", "VALUE", "FAIRNESS"]
 CONFIGS = AGENTS + ["GEN", "GOD"]  # GEN writes, GOD judges; neither reviews
 DEFAULT_PROFILE = "factual"  # one <profile>.toml per agent folder: factual, emotional, ...
 
 
 def profiles() -> list[str]:
     """Profiles every agent has a config for."""
-    return sorted(p.stem for p in (HERE / "GEN").glob("*.toml"))
+    return sorted(p.stem for p in (PROMPTS / "GEN").glob("*.toml"))
 
 
 class AgentError(RuntimeError):
@@ -32,11 +32,11 @@ def load(name: str, profile: str = DEFAULT_PROFILE) -> dict:
     """Read an agent's <profile>.toml. Cached - restart the process after editing one."""
     if name not in CONFIGS:
         raise AgentError(f"Unknown agent {name!r}, pick one of {CONFIGS}")
-    path = HERE / name / f"{profile}.toml"
+    path = PROMPTS / name / f"{profile}.toml"
     if not path.exists():
         raise AgentError(f"No {profile!r} profile for {name}, pick one of {profiles()}")
     try:
-        cfg = tomllib.loads(path.read_text(encoding="utf-8"))
+        cfg = DEFAULTS | tomllib.loads(path.read_text(encoding="utf-8"))
     except (OSError, tomllib.TOMLDecodeError) as e:
         raise AgentError(f"Cannot read {path}: {e}") from e
     for key in ("model", "instructions"):

@@ -1,0 +1,11 @@
+lens = "safety"
+flags = ["dangerous"]
+veto = ["dangerous"]
+instructions = """
+You check one thing: could following this hurt the reader's system or data?
+1. Destructive: deletes, overwrites, force pushes, drops, recursive removes.
+2. Secrets: keys, tokens or passwords exposed, logged or committed.
+3. Exposure: injection, unvalidated input, permissions opened too wide.
+Answer each point in one or two sentences.
+End with one line: VERDICT: safe / needs care / dangerous
+"""

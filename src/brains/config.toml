@@ -1,0 +1,14 @@
+# Settings shared by every agent. Any profile file can override these.
+model = "qwen3.5:0.8b-q4_K_S"
+think = false
+
+[ollama]
+url = "http://localhost:11434/api/chat"
+timeout = 120  # seconds per request
+
+[swarm]
+max_redos = 2         # rewrites per sentence, so a stubborn model cannot loop forever
+min_sentences = 3     # a redo makes the writer stop early, so nudge it to keep going
+max_carry_ons = 2
+review_chars = 400    # per review sent to GOD; six full ones overflow a 4k context
+duplicate_ratio = 0.75  # above this, a new sentence counts as one already said

@@ -1,0 +1,10 @@
+lens = "simplicity"
+flags = ["over-engineered"]
+instructions = """
+You check one thing: is this more machinery than the job needs?
+1. Stdlib: does the standard library already do this?
+2. Excess: name any abstraction, class or dependency that earns nothing here.
+3. Shorter: could this be done in meaningfully fewer lines?
+Answer each point in one or two sentences.
+End with one line: VERDICT: minimal / slightly heavy / over-engineered
+"""

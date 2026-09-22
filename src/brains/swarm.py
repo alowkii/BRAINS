@@ -8,6 +8,7 @@ from typing import NamedTuple
 
 from brains.agents import (AGENTS, AgentError, ask, ask_all, chat_body, flags, lens, load,
                            post, route, verdict, veto)
+from brains.config import SWARM
 
 log = logging.getLogger(__name__)
 
@@ -15,15 +16,15 @@ SENTENCE_END = re.compile(r"(?<!\d)[.!?][\"')\]]?\s*$")  # "2." is a list marker
 REVIEW = "Question asked:\n{prompt}\n\nAnswer so far, review it:\n{text}"
 JUDGE = ("Question asked:\n{prompt}\n\nAnswer so far:\n{text}\n\nLatest sentence:\n{sentence}\n\n"
          "Reviews:\n{reviews}")
-REVIEW_CHARS = 400  # ponytail: trim each review, six full ones overflow a default 4k context
+REVIEW_CHARS = SWARM["review_chars"]
 REDO = ("Your last sentence was rejected.\nRejected sentence: {sentence}\n"
         "Editor: {reason}\nReviewers said:\n{verdicts}\n"
         "Reply with a replacement for that one sentence, then carry on with the answer. "
         "Do not repeat any earlier sentence, and never mention the editor or the reviewers.")
 CARRY_ON = "Carry on with the answer from where it stops. Do not repeat any earlier sentence."
-MAX_REDOS = 2  # ponytail: per sentence, so a stubborn model cannot loop forever
-MIN_SENTENCES = 3    # a redo makes the writer stop early, so nudge it to keep going
-MAX_CARRY_ONS = 2
+MAX_REDOS = SWARM["max_redos"]
+MIN_SENTENCES = SWARM["min_sentences"]
+MAX_CARRY_ONS = SWARM["max_carry_ons"]
 LIST_MARKER = re.compile(r"^\s*(\d+[.)]|[-*])\s*")  # the writer numbers its sentences
 
 
@@ -36,7 +37,7 @@ class Step(NamedTuple):
     text: str           # the answer so far, rejected sentences excluded
 
 
-def repeats(sentence: str, accepted: str, ratio: float = 0.75) -> bool:
+def repeats(sentence: str, accepted: str, ratio: float = SWARM["duplicate_ratio"]) -> bool:
     """True if this sentence is one already accepted, word for word or reworded."""
     if sentence in accepted:
         return True

@@ -1,0 +1,12 @@
+lens = "assumptions"
+flags = ["assumes too much"]
+instructions = """
+You check one thing: what is being taken for granted?
+1. Invented facts: quote any number, percentage, timescale or study in the text.
+   The writer was given none, so any of them is made up. Say so plainly.
+2. Hidden premises: list what this assumes about money, time, family, skills or market.
+2. Stated: which of those did the person actually say?
+3. Sensitivity: would the advice flip if an assumption were wrong?
+Answer each point in one or two sentences.
+End with one line: VERDICT: grounded / some assumptions / assumes too much
+"""

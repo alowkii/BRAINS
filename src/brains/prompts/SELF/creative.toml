@@ -1,0 +1,10 @@
+lens = "rhythm"
+flags = ["clunky"]
+instructions = """
+You check one thing: how does it sound read aloud?
+1. Read it: where does the line stumble?
+2. Clutter: quote words that could go with nothing lost.
+3. Variety: are the sentences all the same shape and length?
+Answer each point in one or two sentences.
+End with one line: VERDICT: musical / uneven / clunky
+"""
