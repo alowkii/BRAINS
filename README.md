@@ -1,4 +1,6 @@
-# brains
+# BRAINS
+
+**B**ehavioral **R**easoning & **A**daptive **I**ntelligence **N**etwork **S**warm.
 
 Six review agents (M1–M6) that check a piece of text from six different angles.
 All run locally on `qwen3.5:0.8b-q4_K_S` via Ollama. Each ends its reply with a one-line `VERDICT:`.

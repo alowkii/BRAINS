@@ -1,7 +1,7 @@
 [project]
 name = "brains"
 version = "0.1.0"
-description = "Add your description here"
+description = "Behavioral Reasoning & Adaptive Intelligence Network Swarm: six local review agents, each checking text from a different angle"
 readme = "README.md"
 authors = [
     { name = "Aalok Pandit", email = "paalok333@gmail.com" }
