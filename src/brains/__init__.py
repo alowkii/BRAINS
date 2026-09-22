@@ -96,9 +96,30 @@ def main() -> None:
         sys.exit("\nbye")
 
 
+GREETINGS = {"hi", "hello", "hey", "yo", "hiya", "sup", "good morning", "good evening",
+             "good afternoon", "thanks", "thank you", "ok", "okay", "cool", "bye now"}
+
+
+def small_talk(prompt: str) -> str:
+    """A greeting has nothing to review, so it never reaches the panel."""
+    bare = prompt.strip().strip("!.?,").lower()
+    if bare in GREETINGS:
+        return ("Hello. What is on your mind?" if bare not in ("thanks", "thank you")
+                else "You are welcome.")
+    return ""
+
+
 def answer(prompt: str, thinking: bool, history: list[dict[str, str]] | None = None) -> str:
     """One turn: route it, write it sentence by sentence, record the thinking."""
+    if reply := small_talk(prompt):
+        write_thinking(f"\nQ: {prompt}\nsmall talk, no panel\nFINAL: {reply}")
+        return reply
     profile = route(prompt, context_of(history))
+    if profile == "clarify":  # too little to answer, so ask instead of guessing
+        reply = ask("GEN", context_of(history) + prompt, "clarify").strip()
+        write_thinking(f"\nQ: {prompt}\nProfile: clarify (asked instead of answering)"
+                       f"\nFINAL: {reply}")
+        return reply
     if thinking:
         print(f"[profile: {profile}]")
     write_thinking(f"\nQ: {prompt}\nProfile: {profile}")
