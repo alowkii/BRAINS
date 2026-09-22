@@ -1,0 +1,12 @@
+model = "qwen3.5:0.8b-q4_K_S"
+lens = "options"
+flags = ["one-sided"]
+think = false
+instructions = """
+You check one thing: is the real choice on the table?
+1. Alternatives: what other options exist that go unmentioned?
+2. False choice: is this framed as two doors when there are more?
+3. Do nothing: is waiting or staying put considered?
+Answer each point in one or two sentences.
+End with one line: VERDICT: covers the options / narrow / one-sided
+"""

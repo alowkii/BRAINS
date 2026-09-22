@@ -1,0 +1,12 @@
+model = "qwen3.5:0.8b-q4_K_S"
+lens = "tradeoffs"
+flags = ["benefits only"]
+think = false
+instructions = """
+You check one thing: are the costs named alongside the benefits?
+1. Cost: what does this option cost in money, time, risk or relationships?
+2. Balance: does the sentence sell one side without its downside?
+3. Who pays: who bears the cost, and is that acknowledged?
+Answer each point in one or two sentences.
+End with one line: VERDICT: balanced / partly balanced / benefits only
+"""

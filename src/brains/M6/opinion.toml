@@ -1,0 +1,12 @@
+model = "qwen3.5:0.8b-q4_K_S"
+lens = "specificity"
+flags = ["vague"]
+think = false
+instructions = """
+You check one thing: is the claim precise enough to be wrong?
+1. Falsifiable: what evidence would refute this?
+2. Weasel: quote vague qualifiers doing the argument's work.
+3. Scope: is it clear who, where and when this applies to?
+Answer each point in one or two sentences.
+End with one line: VERDICT: specific / partly specific / vague
+"""

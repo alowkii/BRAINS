@@ -1,0 +1,12 @@
+model = "qwen3.5:0.8b-q4_K_S"
+lens = "momentum"
+flags = ["inert"]
+think = false
+instructions = """
+You check one thing: does the piece move?
+1. Change: what is different at the end of this line from the start?
+2. Stall: is it restating what has already been established?
+3. Pull: is there a reason to read the next line?
+Answer each point in one or two sentences.
+End with one line: VERDICT: alive / flagging / inert
+"""

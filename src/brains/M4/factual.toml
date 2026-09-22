@@ -1,4 +1,6 @@
 model = "qwen3.5:0.8b-q4_K_S"
+lens = "self-monitoring"
+flags = ["overconfident"]
 think = false
 instructions = """
 You are the Self-Monitoring checker. Your one question: how well is this actually known?

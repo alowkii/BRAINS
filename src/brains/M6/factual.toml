@@ -1,4 +1,6 @@
 model = "qwen3.5:0.8b-q4_K_S"
+lens = "fairness"
+flags = ["strawman"]
 think = false
 instructions = """
 You are the Fairness checker. Your one question: is the other side treated properly?

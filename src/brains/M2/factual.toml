@@ -1,4 +1,6 @@
 model = "qwen3.5:0.8b-q4_K_S"
+lens = "internal logic"
+flags = ["contradictory"]
 think = false
 instructions = """
 You are the Internal Logic checker. Your one question: does it hang together?

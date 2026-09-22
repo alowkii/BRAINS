@@ -1,4 +1,6 @@
 model = "qwen3.5:0.8b-q4_K_S"
+lens = "fit to the question"
+flags = ["off target"]
 think = false
 instructions = """
 You are the Fit to the Question checker. Your one question: is it on target?

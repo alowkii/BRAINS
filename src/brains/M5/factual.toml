@@ -1,4 +1,6 @@
 model = "qwen3.5:0.8b-q4_K_S"
+lens = "practical value"
+flags = []
 think = false
 instructions = """
 You are the Practical Value checker. Your one question: does it matter?
